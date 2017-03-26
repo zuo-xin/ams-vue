@@ -2,7 +2,7 @@
   <div class="home">
     <div class="leftMenu">
       <div class="title">首页</div>
-      <router-link class="item" v-for="menu in menus" :to="menu.router">{{menu.title}}</router-link>
+      <router-link class="item" :key="menu.router" v-for="(menu,index) in menus" :class="{homeActive:isHomeActive&&(index ===0)}" :to="menu.router">{{menu.title}}</router-link>
     </div>
 
     <router-view></router-view>
@@ -19,6 +19,13 @@ import homeRefuse from './home-refuse.vue'
     computed:{
       menus:function(){
         return this.$store.state.homeLeft;
+      },
+      isHomeActive:function(){
+        if(this.$route.fullPath === '/' || this.$route.fullPath === '/home'){
+          return true
+        }else{
+          return false
+        }
       }
     },
     components:{
@@ -66,6 +73,9 @@ import homeRefuse from './home-refuse.vue'
     text-decoration: none;
 }
 .router-link-active{
+  background-color: #272f3c;
+}
+.homeActive{
   background-color: #272f3c;
 }
 </style>

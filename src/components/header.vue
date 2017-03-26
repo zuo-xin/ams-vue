@@ -3,9 +3,11 @@
     <div class="top-menu">
      <!--  <router-link v-for="menu in menus" v-bind:to="menu.router">{{menu.title}}</router-link> -->
       <!-- <a v-for="menu in menus" v-bind:href="menu.router">{{menu.title}}</a> -->
-      <router-link v-for="menu in menus" v-bind:to="menu.router">{{menu.title}}</router-link>
+      <router-link v-for="(menu,index) in menus" :key="menu.router" v-bind:class="{routerAactive:isActive&&index===0}" v-bind:to="menu.router">{{menu.title}}</router-link>
     </div>
     <div class="account">{{username}}</div>
+
+    <router-view></router-view>
   </div>
 
 </template>
@@ -30,7 +32,17 @@
             .catch(function(error) {
               return "暂无数据"
             });
+    },
+    computed:{
+      isActive:function(){
+        if(this.$route.fullPath === '/'){
+          return true
+        }else{
+          return false
         }
+        //console.log(typeof this.$route.fullPath)
+      }
+    }
 
   }
 </script>
@@ -74,6 +86,9 @@
     color: #fff;
   }
   .router-link-active{
+    border-bottom: 4px solid #ffb500;
+  }
+  .routerAactive{
     border-bottom: 4px solid #ffb500;
   }
 </style>

@@ -17,17 +17,8 @@
         <th>流程状态</th>
       </tr>
     </thead>
-    <tbody>
-      <tr>
-        <td>2</td>
-        <td>王芳</td>
-        <td>420984199012020744 </td>
-        <td>动车宝-全款车(先息后本)</td>
-        <td>20万</td>
-        <td>2个月</td>
-        <td>2017-03-09 16:01:59</td>
-        <td>面审终审</td>
-      </tr>
+    <tbody v-html="homeData">
+
     </tbody>
   </table>
 </div>
@@ -35,12 +26,18 @@
 </template>
 <script>
   export default{
-    mounted (){
+    data(){
+      return{
+        homeData:""
+      }
+    },
+    created  (){
         this.getData();
     },
     methods:{
       getData:function(){
         var that = this;
+        this.$store.commit('showLoading');
         this.$http.post('/api/credit/income/search', {
           loanincome:{
             check_status: "uncheck"
@@ -48,18 +45,40 @@
           currentpage:1,
           pagenum:20
         })
-        .then(function(response) {
+        .then(function(res) {
+          if(res.data.data.list.loanincome.length){
+            let attr = res.data.data.attributes.loanincome,
+                data = res.data.data.list.loanincome,
+                _html="";
+            for(let i =0;i<data.length;i++){
+
+              _html += '<tr class="selectRow">\
+                                <td>' + data[i].id + '</td>\
+                                <td>' + data[i].realname + '</td>\
+                                <td>' + data[i].id_card + '</td>\
+                                <td>' + data[i].product_name + '</td>\
+                                <td>' + that.util.moneyFormat(data[i].credit_money, true) + '</td>\
+                                <td>' + data[i].duetime + (attr.duetime_type.stype[data[i].duetime_type] ? attr.duetime_type.stype[data[i].duetime_type] : '') + '</td>\
+                                <td>' + that.util.formatTime(data[i].addtime) + '</td>\
+                                <td>' + s[data[i].status] + '</td>\
+                            </tr>'
+
+            }
+          }else{
+            that.homeData = '<tr><td colspan=10>暂无数据</td></tr>'
+          }
+          that.$store.commit('hideLoading');
 
         })
         .catch(function(error) {
+          that.$store.commit('hideLoading');
 
         });
       }
     }
-
   }
 </script>
-<style>
+<style scoped>
   .page{
     position: absolute;
     left: 0;

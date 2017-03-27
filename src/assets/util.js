@@ -93,5 +93,6 @@ export default{
         s = t.getSeconds();
         if (s < 10) s = '0' + s;
         return y + '-' + m + '-' + d + ' ' + h + ':' + i + ':' + s;
-    }
+    },
+    aaa:"aaa"
 }

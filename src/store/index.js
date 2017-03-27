@@ -23,9 +23,30 @@ export default new Vuex.Store({
       sysLeft:[
         {title:"系统管理",router:"/setting/role"},
         {title:"成员管理",router:"/setting/account"}
-      ]
+      ],
+      loading:false,
+      mask:false,
+      hint:false
     },
     mutations: {
-
+      showLoading(state) {
+        state.loading = true
+      },
+      hideLoading(state) {
+        state.loading = false
+      },
+      showMask(state) {
+          state.mask = true
+      },
+      hideMask(state) {
+          state.mask = false
+      },
+      hint(state,text){
+        state.hint = true;
+        state.hintText = text;
+        setInterval(function(){
+        state.hint = false;
+          },5000)
+      }
     }
 });

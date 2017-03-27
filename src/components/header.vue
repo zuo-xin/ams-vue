@@ -3,8 +3,9 @@
     <div class="top-menu">
      <!--  <router-link v-for="menu in menus" v-bind:to="menu.router">{{menu.title}}</router-link> -->
       <!-- <a v-for="menu in menus" v-bind:href="menu.router">{{menu.title}}</a> -->
-      <router-link v-for="(menu,index) in menus" :key="menu.router" v-bind:class="{routerAactive:isActive&&index===0}" v-bind:to="menu.router">{{menu.title}}</router-link>
+      <router-link v-for="(menu,index) in menus" v-bind:key="menu.router" v-bind:class="{routerAactive:isActive&&index===0}" v-bind:to="menu.router">{{menu.title}}</router-link>
     </div>
+
     <div class="account">{{username}}</div>
 
     <router-view></router-view>

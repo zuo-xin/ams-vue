@@ -1,7 +1,15 @@
 <template>
-  <div id="mask" v-if="this.$store.state.mask"></div>
+  <div id="mask" v-if="this.$store.state.mask" @click="hidePanel()"></div>
 </template>
-
+<script>
+  export default{
+    methods:{
+      hidePanel:function(){
+        this.$store.commit("hidePanel");
+      }
+    }
+  }
+</script>
 <style scoped>
 #mask{
   position: fixed;

@@ -26,7 +26,10 @@ export default new Vuex.Store({
       ],
       loading:false,
       mask:false,
-      hint:false
+      hint:false,
+      panel:false,
+      homeid:"",
+      currentPanel:""
     },
     mutations: {
       showLoading(state) {
@@ -47,6 +50,20 @@ export default new Vuex.Store({
         setInterval(function(){
         state.hint = false;
           },5000)
+      },
+      homeId(state,id){
+        state.homeid = id;
+      },
+      showPanel(state,cp) {
+        state.mask = true
+        state.panel = true;
+        state.currentPanel = cp;
+      },
+      hidePanel(state) {
+        state.mask = false;
+        state.panel = false;
+        state.currentPanel = "";
       }
-    }
+}
+
 });

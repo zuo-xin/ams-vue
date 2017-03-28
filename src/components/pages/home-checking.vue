@@ -17,7 +17,7 @@
         <th>流程状态</th>
       </tr>
     </thead>
-    <tbody v-html="homeData">
+    <tbody v-html="homeData" v-on:click="showHomePanel($event)">
 
     </tbody>
   </table>
@@ -28,7 +28,8 @@
   export default{
     data(){
       return{
-        homeData:""
+        homeData:"",
+        pmsg:"aaa"
       }
     },
     created  (){
@@ -46,42 +47,45 @@
           pagenum:20
         })
         .then(function(res) {
-          console.log(res)
           if(res.data.data.list.loanincome.length){
             var attr = res.data.data.attributes.loanincome,
                 data = res.data.data.list.loanincome,
                 _html="";
            for(var i=0;i<data.length;i++){
-              //console.log(data[i].id);
-              console.log("aaa");
-             /* that.homeData += "<tr class='selectRow' data-id=" + data[i].id;
-              that.homeData += "<tr class='selectRow' data-id='" + data[i].id + "'><td>" + data[i].id + "</td><td>" + data[i].realname + "</td><td>" + data[i].id_card + "</td><td>" + data[i].product_name + "</td><td>" + that.util.moneyFormat(data[i].credit_money, true) + "</td><td>" + data[i].duetime + (attr.duetime_type.stype[data[i].duetime_type] ? attr.duetime_type.stype[data[i].duetime_type] : '') + "</td><td>" + that.util.formatTime(data[i].addtime) + "</td><td>" + s[data[i].status] + "</td></tr>";*/
-              that.homeData += "<tr data-id='" + data[i].id + "'>\
-                                <td>" + data[i].id + "</td>\
-                                <td>" + data[i].realname + "</td>\
-                                <td>" + data[i].id_card + "</td>\
-                                <td>" + data[i].product_name + "</td>\
-                                <td>" + that.util.moneyFormat(data[i].credit_money, true) + "</td>\
-                                <td>" + data[i].duetime + (attr.duetime_type.stype[data[i].duetime_type] ? attr.duetime_type.stype[data[i].duetime_type] : '') + "</td>\
-                                <td>" + that.util.formatTime(data[i].addtime) + "</td>\
-                                <td>" + s[data[i].status] + "</td>\
-                            </tr>";
-
+              _html += '<tr class="selectData" data-id="'+data[i].id+'">\
+                          <td>'+data[i].id+'</td>\
+                          <td>' + data[i].realname + '</td>\
+                          <td>' + data[i].id_card + '</td>\
+                          <td>' + data[i].product_name + '</td>\
+                          <td>' + that.util.moneyFormat(data[i].credit_money, true) + '</td>\
+                          <td>' + data[i].duetime + (attr.duetime_type.stype[data[i].duetime_type] ? attr.duetime_type.stype[data[i].duetime_type] : '') + '</td>\
+                          <td>' + that.util.formatTime(data[i].addtime) + '</td>\
+                          <td>' + attr.status.stype[data[i].status] + '</td>\
+                        </tr>'
             }
+            that.homeData = _html;
           }else{
             that.homeData = '<tr><td colspan=8>暂无数据</td></tr>'
           }
           that.$store.commit('hideLoading');
-
         })
         .catch(function(error) {
-          that.$store.commit('hideLoading');
-
+            that.$store.commit('hideLoading');
         });
+      },
+      showHomePanel:function(e){
+        var id = "";
+        if(e.target.className == "selectData"){
+          id = e.target.dataset.id
+        }else{
+          id = e.target.parentNode.dataset.id;
+        }
+        this.$store.commit("homeId",id);
+        this.$store.commit("showPanel","homePanel");
       }
     }
   }
-</script>
+   </script>
 <style scoped>
   .page{
     position: absolute;
